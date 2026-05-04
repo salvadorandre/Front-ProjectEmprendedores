@@ -3,6 +3,7 @@ import { routes } from "./routes";
 import { MainLayout } from "../../layouts/MainLayout";
 import { ErrorPage } from "./ErrorPage";
 import { LoginPage } from "@/features/auth/pages/LoginPage";
+import { CompleteDoctorProfile } from "@/features/doctors/pages/CompleteDoctorProfile";
 
 
 const Home = () => <h1>Home</h1>;
@@ -17,6 +18,11 @@ export const router = createBrowserRouter([
         path:routes.login,
         element: <Login/>
     },
+    {
+        path:routes.onboarding,
+        element: <CompleteDoctorProfile/>
+    }
+    ,
     {
         element:<MainLayout/>,
         errorElement: <ErrorPage/>,
