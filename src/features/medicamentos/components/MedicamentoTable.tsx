@@ -13,13 +13,17 @@ type Medicamento = {
   description: string
 }
 
+interface MedicamentoTableProps {
+  data: Medicamento[]
+  onDelete: (id: number) => void
+  onEdit: (med: Medicamento) => void
+}
+
 export const MedicamentoTable = ({
   data,
   onDelete,
-}: {
-  data: Medicamento[]
-  onDelete: (id: number) => void
-}) => {
+  onEdit,
+}: MedicamentoTableProps) => {
   return (
     <Table>
       <TableHeader>
@@ -38,7 +42,7 @@ export const MedicamentoTable = ({
             <TableCell className="flex gap-2">
               <button
                 className="text-blue-500"
-                onClick={() => console.log("editar", med.id)}
+                onClick={() => onEdit(med)}
               >
                 Editar
               </button>

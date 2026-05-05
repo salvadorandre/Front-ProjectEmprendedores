@@ -1,15 +1,46 @@
-let medicamentos: any[] = []
+type Medicamento = {
+  id: number
+  name: string
+  description: string
+  imageUrl?: string
+}
+
+let medicamentos: Medicamento[] = [
+  {
+    id: 1,
+    name: "Paracetamol",
+    description: "Alivia el dolor y la fiebre",
+    imageUrl: "",
+  },
+  {
+    id: 2,
+    name: "Ibuprofeno",
+    description: "Antiinflamatorio no esteroideo",
+    imageUrl: "",
+  },
+  {
+    id: 3,
+    name: "Amoxicilina",
+    description: "Antibiótico de amplio espectro",
+    imageUrl: "",
+  },
+]
+
+const delay = (ms: number) =>
+  new Promise((res) => setTimeout(res, ms))
 
 export const medicamentoService = {
-  getAll: async () => {
-    await new Promise((r) => setTimeout(r, 500))
-    return medicamentos
+  getAll: async (): Promise<Medicamento[]> => {
+    await delay(500)
+    return [...medicamentos]
   },
 
-  create: async (data: any) => {
-    await new Promise((r) => setTimeout(r, 500))
+  create: async (
+    data: Omit<Medicamento, "id">
+  ): Promise<Medicamento> => {
+    await delay(500)
 
-    const newItem = {
+    const newItem: Medicamento = {
       id: Date.now(),
       ...data,
     }
@@ -18,16 +49,34 @@ export const medicamentoService = {
     return newItem
   },
 
-  update: async (id: number, data: any) => {
-    await new Promise((r) => setTimeout(r, 500))
+  update: async (
+    id: number,
+    data: Partial<Omit<Medicamento, "id">>
+  ): Promise<Medicamento> => {
+    await delay(500)
 
-    medicamentos = medicamentos.map((m) =>
-      m.id === id ? { ...m, ...data } : m
-    )
+    const index = medicamentos.findIndex((m) => m.id === id)
+
+    if (index === -1) {
+      throw new Error("Medicamento no encontrado")
+    }
+
+    medicamentos[index] = {
+      ...medicamentos[index],
+      ...data,
+    }
+
+    return medicamentos[index]
   },
 
-  delete: async (id: number) => {
-    await new Promise((r) => setTimeout(r, 500))
+  delete: async (id: number): Promise<void> => {
+    await delay(500)
+
+    const exists = medicamentos.some((m) => m.id === id)
+
+    if (!exists) {
+      throw new Error("Medicamento no encontrado")
+    }
 
     medicamentos = medicamentos.filter((m) => m.id !== id)
   },
