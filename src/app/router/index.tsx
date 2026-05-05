@@ -4,13 +4,14 @@ import { MainLayout } from "../../layouts/MainLayout";
 import { ErrorPage } from "./ErrorPage";
 import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { CompleteDoctorProfile } from "@/features/doctors/pages/CompleteDoctorProfile";
+import { Medicamentos } from "@/features/medicamentos/pages/Medicamentos";
 
 
 const Home = () => <h1>Home</h1>;
 const Login = () => <LoginPage/>;
 const Tratamientos = () => <h1>Tratamientos</h1>;
 const Dashboard = () => <h1>Dashboard</h1>;
-const Medicamentos = () => <h1>Medicamentos</h1>;
+const Medicamento = () => <Medicamentos/>;
 
 
 export const router = createBrowserRouter([
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
             },
             {
                 path:routes.medicamentos,
-                element: <Medicamentos/>
+                element: <Medicamento/>
             },
             {
                 path:routes.dashboard,
