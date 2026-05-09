@@ -1,7 +1,7 @@
-type Tratamiento = {
-  id: number
-  name: string
-  description: string
+import type { Tratamiento } from "../types"
+
+type TratamientoPayload = Omit<Tratamiento, "id"> & {
+  medicamentos?: Tratamiento["medicamentos"]
 }
 
 let tratamientos: Tratamiento[] = [
@@ -9,16 +9,19 @@ let tratamientos: Tratamiento[] = [
     id: 1,
     name: "Paracetamol",
     description: "Alivia el dolor y la fiebre",
+    medicamentos: [],
   },
   {
     id: 2,
     name: "Ibuprofeno",
     description: "Antiinflamatorio no esteroideo",
+    medicamentos: [],
   },
   {
     id: 3,
     name: "Amoxicilina",
     description: "Antibiótico de amplio espectro",
+    medicamentos: [],
   },
 ]
 
@@ -32,13 +35,14 @@ export const tratamientoService = {
   },
 
   create: async (
-    data: Omit<Tratamiento, "id">
+    data: TratamientoPayload
   ): Promise<Tratamiento> => {
     await delay(500)
 
     const newItem: Tratamiento = {
       id: Date.now(),
       ...data,
+      medicamentos: data.medicamentos ?? [],
     }
 
     tratamientos.push(newItem)
@@ -47,7 +51,7 @@ export const tratamientoService = {
 
   update: async (
     id: number,
-    data: Partial<Omit<Tratamiento, "id">>
+    data: Partial<TratamientoPayload>
   ): Promise<Tratamiento> => {
     await delay(500)
 

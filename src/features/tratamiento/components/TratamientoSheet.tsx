@@ -28,12 +28,12 @@ export const TratamientoSheet = ({
       <SheetContent className="w-full sm:max-w-100 overflow-y-auto p-5">
         <SheetHeader>
           <SheetTitle className="text-lg">
-            {selected ? "Editar medicamento" : "Crear medicamento"}
+            {selected ? "Editar Tratamiento" : "Crear Tratamiento"}
           </SheetTitle>
           <SheetDescription className="text-sm">
             {selected
-              ? "Modifica los datos del medicamento"
-              : "Agrega un nuevo medicamento al sistema"}
+              ? "Modifica los datos del Tratamiento"
+              : "Agrega un nuevo Tratamiento al sistema"}
           </SheetDescription>
         </SheetHeader>
         <div className="mt-8">

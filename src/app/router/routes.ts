@@ -3,6 +3,7 @@ export const routes = {
     login: "/login",
     dashboard:"/dashboard",
     tratamientos:"/tratamientos",
+    editarTratamientos:"/editTratamientos",
     medicamentos:"/medicamentos",
     onboarding:"/onboarding/doctor"
 };

@@ -6,11 +6,13 @@ import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { CompleteDoctorProfile } from "@/features/doctors/pages/CompleteDoctorProfile";
 import { Medicamentos } from "@/features/medicamentos/pages/Medicamentos";
 import { Tratamientos } from "@/features/tratamiento/pages/Tratamientos";
+import { EditTratamiento } from "@/features/tratamiento/pages/EditTratamiento";
 
 
 const Home = () => <h1>Home</h1>;
 const Login = () => <LoginPage/>;
 const Tratamiento = () => <Tratamientos/>;
+const EditarTratamiento = () => <EditTratamiento/>
 const Dashboard = () => <h1>Dashboard</h1>;
 const Medicamento = () => <Medicamentos/>;
 
@@ -35,7 +37,12 @@ export const router = createBrowserRouter([
             },
             {
                 path:routes.tratamientos,
-                element: <Tratamiento/>
+                element:<Tratamiento/>
+            },
+            {
+                path:routes.editarTratamientos,
+                element:<EditarTratamiento/>
+                
             },
             {
                 path:routes.medicamentos,

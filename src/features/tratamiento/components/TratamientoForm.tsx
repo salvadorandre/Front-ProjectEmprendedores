@@ -39,7 +39,7 @@ export const TratamientoForm = ({
           name="name"
           control={control}
           render={({ field }) => (
-            <Input placeholder="Nombre del medicamento" {...field} />
+            <Input placeholder="Nombre del tratamiento" {...field} />
           )}
         />
         {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
@@ -51,7 +51,7 @@ export const TratamientoForm = ({
           name="description"
           control={control}
           render={({ field }) => (
-            <Textarea placeholder="Descripción del medicamento" {...field} />
+            <Textarea placeholder="Descripción del tratamiento" {...field} />
           )}
         />
         {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}

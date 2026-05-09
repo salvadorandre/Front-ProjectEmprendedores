@@ -21,7 +21,11 @@ export const useTratamientos = () => {
     }
   }
 
-  const createTratamiento = async (payload: Omit<Tratamiento, "id">) => {
+  type TratamientoPayload = Omit<Tratamiento, "id"> & {
+    medicamentos?: Tratamiento["medicamentos"]
+  }
+
+  const createTratamiento = async (payload: TratamientoPayload) => {
     try {
       setLoading(true)
       setError(null)
@@ -35,7 +39,7 @@ export const useTratamientos = () => {
     }
   }
 
-  const updateTratamiento = async (id: number, payload: Partial<Omit<Tratamiento, "id">>) => {
+  const updateTratamiento = async (id: number, payload: Partial<TratamientoPayload>) => {
     try {
       setLoading(true)
       setError(null)

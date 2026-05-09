@@ -1,10 +1,14 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { TratamientoTable } from "../components/TratamientoTable"
 import { Button } from "@/shared/components/ui/button"
 import { TratamientoSheet } from "../components/TratamientoSheet"
 import { useTratamientos } from "../hooks/useTratamientos"
+import { routes } from "@/app/router/routes"
 
 export const Tratamientos = () => {
+  const navigate = useNavigate()
+
   const {
     data,
     loading,
@@ -26,6 +30,12 @@ export const Tratamientos = () => {
   const handleEdit = (trat: any) => {
     setSelected(trat)
     setOpen(true)
+  }
+
+  const handleView = (id: number) => {
+    navigate(routes.editarTratamientos, {
+      state: { id },
+    })
   }
 
   const handleSubmit = async (formData: any) => {
@@ -51,6 +61,7 @@ export const Tratamientos = () => {
         data={data}
         onDelete={deleteTratamiento}
         onEdit={handleEdit}
+        onView={handleView}
       />
 
       <TratamientoSheet

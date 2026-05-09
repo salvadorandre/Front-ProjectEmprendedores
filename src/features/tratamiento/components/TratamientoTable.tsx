@@ -12,12 +12,14 @@ interface TratamientoTableProps {
   data: Tratamiento[]
   onDelete: (id: number) => void
   onEdit: (trat: Tratamiento) => void
+  onView:(id:number) => void
 }
 
 export const TratamientoTable = ({
   data,
   onDelete,
   onEdit,
+  onView,
 }: TratamientoTableProps) => {
   return (
     <Table>
@@ -47,6 +49,13 @@ export const TratamientoTable = ({
                 onClick={() => onDelete(trat.id)}
               >
                 Eliminar
+              </button>
+
+              <button
+                className="text-green-500"
+                onClick={()=> onView(trat.id)}>
+                Medicamentos
+                
               </button>
             </TableCell>
           </TableRow>

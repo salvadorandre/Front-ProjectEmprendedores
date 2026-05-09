@@ -1,4 +1,4 @@
-type Medicamento = {
+export type Medicamento = {
   id: number
   name: string
   description: string
