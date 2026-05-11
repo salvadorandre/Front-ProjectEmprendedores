@@ -6,7 +6,7 @@ import { MainLayout } from "../../layouts/MainLayout"
 import { ErrorPage } from "./ErrorPage"
 
 import { LoginPage } from "@/features/auth/pages/LoginPage"
-import { CompleteDoctorProfile } from "@/features/doctors/pages/CompleteDoctorProfile"
+import { RegisterDoctorPage } from "@/features/doctors/pages/RegisterDoctorPage"
 
 import { Medicamentos } from "@/features/medicamentos/pages/Medicamentos"
 import { Tratamientos } from "@/features/tratamiento/pages/Tratamientos"
@@ -21,9 +21,9 @@ export const router = createBrowserRouter([
     path: routes.login,
     element: <LoginPage />,
   },
-  {
-    path: routes.onboarding,
-    element: <CompleteDoctorProfile />,
+    {
+    path: routes.register,
+    element: <RegisterDoctorPage />,
   },
 
   // PRIVADAS
