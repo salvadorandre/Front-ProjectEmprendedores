@@ -24,17 +24,19 @@ export const useAuth = () => {
       setLoading(true)
       setError(null)
 
-
+      localStorage.setItem("temp_password", data.password)
 
       const res = await authService.login(data)
 
-      if (!res.user?.is_doctor) {
-        throw new Error("Esta cuenta no está registrada como doctor")
-      }
       // 💾 guardar en zustand + localStorage
       saveAuth(res)
-      navigate("/")
 
+      // 🚀 navegación segura
+      if (res.user?.is_doctor) {
+        navigate("/home")
+      } else {
+        navigate("/onboarding/doctor")
+      }
 
     } catch (err) {
       setError(
@@ -48,38 +50,8 @@ export const useAuth = () => {
     }
   }
 
-  const loginWithGoogle = async (
-    idToken: string
-  ) => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const res =
-        await authService.googleLogin(idToken)
-
-      if (!res.user?.is_doctor) {
-        throw new Error(
-          "Esta cuenta no está registrada como doctor"
-        )
-      }
-
-      saveAuth(res)
-
-      navigate("/")
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Error con Google"
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
   return {
     login,
-    loginWithGoogle,
     loading,
     error,
   }

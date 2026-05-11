@@ -19,6 +19,8 @@ export const useDoctor = () => {
 
       saveAuth(res);
 
+      localStorage.removeItem("temp_password");
+
       navigate("/home");
     } catch (err) {
       if (err instanceof Error) {

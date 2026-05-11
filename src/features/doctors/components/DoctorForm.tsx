@@ -28,36 +28,10 @@ export const DoctorForm = ({
     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-md space-y-4">
 
       <h1 className="text-xl font-bold text-center">
-        Registrarse Como doctor
+        Completar perfil de doctor
       </h1>
 
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-
-        <div className="space-y-2">
-          <Label>Email</Label>
-          <Input
-            type="email"
-            {...register("email")}
-          />
-          {errors.email && (
-            <p className="text-sm text-red-500">
-              {errors.email.message}
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label>Contraseña</Label>
-          <Input
-            type="password"
-            {...register("password")}
-          />
-          {errors.password && (
-            <p className="text-sm text-red-500">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
 
         {/* Especialidad */}
         <div className="space-y-2">
