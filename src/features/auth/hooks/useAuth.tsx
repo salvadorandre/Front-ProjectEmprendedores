@@ -33,7 +33,7 @@ export const useAuth = () => {
       }
       // 💾 guardar en zustand + localStorage
       saveAuth(res)
-      navigate("/")
+      navigate("/home")
 
 
     } catch (err) {
@@ -66,7 +66,7 @@ export const useAuth = () => {
 
       saveAuth(res)
 
-      navigate("/")
+      navigate("/home")
     } catch (err) {
       setError(
         err instanceof Error

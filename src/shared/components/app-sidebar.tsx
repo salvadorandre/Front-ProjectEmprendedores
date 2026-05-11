@@ -19,7 +19,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <nav className="flex flex-col gap-2 p-2">
             <NavLink
-              to="/"
+              to="/home"
               className={({ isActive }) =>
                 isActive
                   ? "bg-muted px-2 py-1 rounded font-semibold"
