@@ -1,10 +1,6 @@
 import { z } from "zod"
 
 export const doctorSchema = z.object({
-  name: z
-    .string()
-    .min(1, "El nombre es requerido"),
-
   specialty: z
     .string()
     .min(1, "La especialidad es requerida"),

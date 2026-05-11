@@ -1,32 +1,41 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { doctorService } from "../services/doctor.service"
-import { DoctorSchema } from "../forms/doctor.schema"
+import { useAuthStore } from "@/features/auth/store/authStore";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { doctorService } from "../services/doctor.service";
+import { DoctorSchema } from "../forms/doctor.schema";
 
 export const useDoctor = () => {
-  const navigate = useNavigate()
-
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate();
+  const saveAuth = useAuthStore((state) => state.login);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const createDoctor = async (data: DoctorSchema) => {
     try {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
-      await doctorService.create(data)
+      const res = await doctorService.create(data);
 
-      navigate("/")
-    } catch (err: any) {
-      setError(err.message || "Error al crear el perfil")
+      saveAuth(res);
+
+      localStorage.removeItem("temp_password");
+
+      navigate("/home");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Error al crear el perfil");
+      }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return {
     createDoctor,
     loading,
     error,
-  }
-}
+  };
+};

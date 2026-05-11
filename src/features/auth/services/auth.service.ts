@@ -1,13 +1,34 @@
+// features/auth/services/authService.ts
+
+import { AuthResponse } from "../auth.types"
+
+const API_URL = import.meta.env.VITE_API_URL
+// ej: http://127.0.0.1:8000/api/v1
+
 export const authService = {
   login: async (data: { email: string; password: string }) => {
-    // delay para simular red
-    await new Promise((res) => setTimeout(res, 800))
-    
-    const isDoctor = data.email.includes("doc")
+  const response = await fetch(`${API_URL}/login/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
 
-    return {
-      user: { id: 1, email: data.email },
-      doctor: isDoctor ? { id: 10 } : null,
-    }
-  },
+  const text = await response.text()
+
+  let result: any = null
+
+  try {
+    result = text ? JSON.parse(text) : null
+  } catch {
+    throw new Error("Respuesta inválida del servidor")
+  }
+
+  if (!response.ok) {
+    throw new Error(result?.error || "Error al iniciar sesión")
+  }
+
+  return result
+},
 }

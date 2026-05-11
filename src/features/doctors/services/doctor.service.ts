@@ -1,34 +1,56 @@
-type Doctor = {
-  id: number
-  name: string
+import { useAuthStore } from "@/features/auth/store/authStore"
+
+const API_URL = import.meta.env.VITE_API_URL
+
+type DoctorResponse = {
+  user: {
+    id: number
+    email: string
+    is_doctor: boolean
+    is_paciente: boolean
+  }
+  access: string
+  refresh: string
+}
+
+type DoctorPayload = {
   specialty: string
   license: string
 }
 
 export const doctorService = {
-  create: async (data: Omit<Doctor, "id">): Promise<Doctor> => {
-    // Simula latencia
-    await new Promise((res) => setTimeout(res, 800))
+  create: async (data: DoctorPayload): Promise<DoctorResponse> => {
+    const user = useAuthStore.getState().user
 
-    // Simulación de error (útil para probar UI)
-    if (data.license === "0000") {
-      throw new Error("Licencia inválida")
+    if (!user?.email) {
+      throw new Error("No se encontró usuario autenticado")
     }
 
-    return {
-      id: Date.now(), // fake id
-      ...data,
-    }
-  },
+    const tempPassword = localStorage.getItem("temp_password")
 
-  getById: async (id: number): Promise<Doctor> => {
-    await new Promise((res) => setTimeout(res, 500))
-
-    return {
-      id,
-      name: "Dr. Demo",
-      specialty: "Cardiología",
-      license: "123456",
+    if (!tempPassword) {
+      throw new Error("No se encontró contraseña temporal")
     }
+
+    const response = await fetch(`${API_URL}/register-doctor/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        password: tempPassword,
+        especialidad: data.specialty,
+        colegiado: data.license,
+      }),
+    })
+
+    const result = await response.json()
+
+    if (!response.ok) {
+      throw new Error(result.error || "Error al registrar doctor")
+    }
+
+    return result
   },
 }

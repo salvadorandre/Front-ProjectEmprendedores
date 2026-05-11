@@ -25,6 +25,7 @@ export const TratamientoTable = ({
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead>ID</TableHead>
           <TableHead>Nombre</TableHead>
           <TableHead>Descripción</TableHead>
           <TableHead>Acciones</TableHead>
@@ -34,6 +35,7 @@ export const TratamientoTable = ({
       <TableBody>
         {data.map((trat) => (
           <TableRow key={trat.id}>
+            <TableCell>{trat.id}</TableCell>
             <TableCell>{trat.name}</TableCell>
             <TableCell>{trat.description}</TableCell>
             <TableCell className="flex gap-2">

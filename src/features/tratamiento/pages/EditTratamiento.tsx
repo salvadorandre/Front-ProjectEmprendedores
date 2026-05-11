@@ -7,8 +7,15 @@ import { TratamientoForm } from "../components/TratamientoForm"
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import { Label } from "@/shared/components/ui/label"
+import { Textarea } from "@/shared/components/ui/textarea"
 import type { TratamientoSchema } from "../forms/tratamiento.schema"
 import type { Medicamento } from "@/features/medicamentos/types"
+
+type TratamientoMedicamento = Medicamento & {
+  dosis?: string
+  horario?: string
+  instrucciones?: string
+}
 
 export const EditTratamiento = () => {
   const navigate = useNavigate()
@@ -20,7 +27,7 @@ export const EditTratamiento = () => {
   const { data: allMedicamentos, loading: medsLoading } = useMedicamentos()
 
   const [searchQuery, setSearchQuery] = useState("")
-  const [associatedMedicamentos, setAssociatedMedicamentos] = useState<Medicamento[]>([])
+  const [associatedMedicamentos, setAssociatedMedicamentos] = useState<TratamientoMedicamento[]>([])
 
   useEffect(() => {
     if (tratamientoId == null) {
@@ -32,32 +39,37 @@ export const EditTratamiento = () => {
 
   useEffect(() => {
     if (selectedTratamiento) {
-      setAssociatedMedicamentos(selectedTratamiento.medicamentos ?? [])
+      setAssociatedMedicamentos((selectedTratamiento.medicamentos ?? []) as TratamientoMedicamento[])
     }
   }, [selectedTratamiento])
 
   const availableMedicamentos = useMemo(() => {
     if (!searchQuery.trim()) {
-      return allMedicamentos.filter(
-        (med) => !associatedMedicamentos.some((selected) => selected.id === med.id)
-      )
+      return allMedicamentos
     }
 
     const query = searchQuery.toLowerCase()
     return allMedicamentos.filter(
       (med) =>
-        !associatedMedicamentos.some((selected) => selected.id === med.id) &&
-        (med.name.toLowerCase().includes(query) ||
-          med.description.toLowerCase().includes(query))
+        med.name.toLowerCase().includes(query) ||
+        med.description.toLowerCase().includes(query)
     )
-  }, [allMedicamentos, associatedMedicamentos, searchQuery])
+  }, [allMedicamentos, searchQuery])
 
   const handleAddMedicamento = (medicamento: Medicamento) => {
-    setAssociatedMedicamentos((current) => [...current, medicamento])
+    setAssociatedMedicamentos((current) => [...current, { ...medicamento, dosis: "", horario: "", instrucciones: "" }])
   }
 
   const handleRemoveMedicamento = (id: number) => {
     setAssociatedMedicamentos((current) => current.filter((med) => med.id !== id))
+  }
+
+  const handleUpdateMedicamento = (id: number, field: keyof TratamientoMedicamento, value: string) => {
+    setAssociatedMedicamentos((current) =>
+      current.map((med) =>
+        med.id === id ? { ...med, [field]: value } : med
+      )
+    )
   }
 
   const handleSubmit = async (formData: TratamientoSchema) => {
@@ -90,7 +102,7 @@ export const EditTratamiento = () => {
   }
 
   return (
-    <div className="p-4 max-w-3xl mx-auto space-y-8">
+    <div className="p-6 max-w-7xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl font-bold">Editar Tratamiento</h1>
         <p className="text-sm text-slate-600 mt-1">
@@ -98,9 +110,9 @@ export const EditTratamiento = () => {
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
+      <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="space-y-6">
-          <div className="rounded-lg border bg-white p-5 shadow-sm">
+          <div className="rounded-lg border bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold">Datos del tratamiento</h2>
             <TratamientoForm
               key={selectedTratamiento.id}
@@ -110,15 +122,15 @@ export const EditTratamiento = () => {
             />
           </div>
 
-          <div className="rounded-lg border bg-white p-5 shadow-sm">
+          <div className="rounded-lg border bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-semibold">Medicamentos asociados</h2>
+                <h2 className="text-lg font-semibold">Medicamentos disponibles</h2>
                 <p className="text-sm text-slate-500">
-                  Guarda los medicamentos vinculados a este tratamiento.
+                  Busca y agrega medicamentos. Puedes agregar el mismo varias veces.
                 </p>
               </div>
-              <Button variant="secondary" onClick={() => setSearchQuery("")}>Limpiar búsqueda</Button>
+              <Button variant="secondary" onClick={() => setSearchQuery("")}>Limpiar</Button>
             </div>
 
             <div className="mt-4 space-y-4">
@@ -132,46 +144,83 @@ export const EditTratamiento = () => {
                 />
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2 max-h-96 overflow-y-auto">
                 {availableMedicamentos.length > 0 ? (
-                  availableMedicamentos.slice(0, 6).map((med) => (
-                    <div key={med.id} className="flex items-center justify-between rounded border px-3 py-2">
-                      <div>
-                        <p className="font-medium">{med.name}</p>
-                        <p className="text-sm text-slate-500">{med.description}</p>
+                  availableMedicamentos.slice(0, 10).map((med) => (
+                    <div key={med.id} className="flex items-center justify-between rounded border px-3 py-2 hover:bg-slate-50">
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{med.name}</p>
+                        <p className="text-xs text-slate-500">{med.description}</p>
                       </div>
-                      <Button size="sm" onClick={() => handleAddMedicamento(med)}>
+                      <Button size="sm" onClick={() => handleAddMedicamento(med)} className="ml-2">
                         Agregar
                       </Button>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-slate-500">No se encontraron medicamentos para agregar.</p>
+                  <p className="text-sm text-slate-500 text-center py-4">No se encontraron medicamentos para agregar.</p>
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg border bg-white p-5 shadow-sm">
+        <div className="rounded-lg border bg-white p-6 shadow-sm h-fit">
           <h2 className="text-lg font-semibold">Medicamentos seleccionados</h2>
-          <p className="text-sm text-slate-500">Estos medicamentos se guardarán junto al tratamiento.</p>
+          <p className="text-sm text-slate-500">Configura dosis, horario e instrucciones.</p>
 
-          <div className="mt-4 space-y-3">
+          <div className="mt-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
             {associatedMedicamentos.length > 0 ? (
               associatedMedicamentos.map((med) => (
-                <div key={med.id} className="flex items-center justify-between rounded border px-3 py-2">
-                  <div>
-                    <p className="font-medium">{med.name}</p>
-                    <p className="text-sm text-slate-500">{med.description}</p>
+                <div key={med.id} className="rounded-lg border bg-slate-50 p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm">{med.name}</p>
+                      <p className="text-xs text-slate-500">{med.description}</p>
+                    </div>
+                    <Button size="sm" variant="destructive" onClick={() => handleRemoveMedicamento(med.id)} className="ml-2">
+                      Eliminar
+                    </Button>
                   </div>
-                  <Button size="sm" variant="destructive" onClick={() => handleRemoveMedicamento(med.id)}>
-                    Eliminar
-                  </Button>
+
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor={`dosis-${med.id}`} className="text-xs">Dosis</Label>
+                      <Input
+                        id={`dosis-${med.id}`}
+                        value={med.dosis ?? ""}
+                        onChange={(e) => handleUpdateMedicamento(med.id, "dosis", e.target.value)}
+                        placeholder="ej: 500mg cada 8 horas"
+                        className="text-sm"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor={`horario-${med.id}`} className="text-xs">Horario</Label>
+                      <Input
+                        id={`horario-${med.id}`}
+                        type="datetime-local"
+                        value={med.horario ?? ""}
+                        onChange={(e) => handleUpdateMedicamento(med.id, "horario", e.target.value)}
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label htmlFor={`instrucciones-${med.id}`} className="text-xs">Instrucciones</Label>
+                    <Textarea
+                      id={`instrucciones-${med.id}`}
+                      value={med.instrucciones ?? ""}
+                      onChange={(e) => handleUpdateMedicamento(med.id, "instrucciones", e.target.value)}
+                      placeholder="Agregar instrucciones especiales..."
+                      className="text-sm"
+                      rows={2}
+                    />
+                  </div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-slate-500">No hay medicamentos asociados aún.</p>
+              <p className="text-sm text-slate-500 text-center py-8">No hay medicamentos asociados aún.</p>
             )}
           </div>
         </div>

@@ -33,17 +33,6 @@ export const DoctorForm = ({
 
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
 
-        {/* Nombre */}
-        <div className="space-y-2">
-          <Label>Nombre completo</Label>
-          <Input {...register("name")} />
-          {errors.name && (
-            <p className="text-sm text-red-500">
-              {errors.name.message}
-            </p>
-          )}
-        </div>
-
         {/* Especialidad */}
         <div className="space-y-2">
           <Label>Especialidad</Label>
