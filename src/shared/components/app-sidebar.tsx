@@ -4,11 +4,16 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-} from "@/shared/components/ui/sidebar"
 
+} from "@/shared/components/ui/sidebar"
+import { Button } from "./ui/button"
 import { NavLink } from "react-router-dom"
+import { useAuth } from "@/features/auth/hooks/useAuth"
 
 export function AppSidebar() {
+
+  const { logout } = useAuth()
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -67,6 +72,9 @@ export function AppSidebar() {
 
       <SidebarFooter>
         <p className="text-sm px-2">Usuario</p>
+        <Button onClick={logout}>
+          Cerrar sesión
+        </Button>
       </SidebarFooter>
     </Sidebar>
   )

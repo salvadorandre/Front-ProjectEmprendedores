@@ -11,6 +11,7 @@ import { RegisterDoctorPage } from "@/features/doctors/pages/RegisterDoctorPage"
 import { Medicamentos } from "@/features/medicamentos/pages/Medicamentos"
 import { Tratamientos } from "@/features/tratamiento/pages/Tratamientos"
 import { EditTratamiento } from "@/features/tratamiento/pages/EditTratamiento"
+import { Navigate } from "react-router-dom"
 
 const Home = () => <h1>Home</h1>
 const Dashboard = () => <h1>Dashboard</h1>
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
     ),
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: "/",
+        element: <Dashboard/>
+      },
       {
         path: routes.home,
         element: <Home />,

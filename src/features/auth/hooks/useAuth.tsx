@@ -8,6 +8,7 @@ export const useAuth = () => {
   const navigate = useNavigate()
 
   const saveAuth = useAuthStore((state) => state.login)
+  const clearAuth = useAuthStore((state) => state.logout)
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -77,9 +78,16 @@ export const useAuth = () => {
       setLoading(false)
     }
   }
+
+  const logout = async () => {
+    clearAuth()
+    navigate("/login")
+  }
+
   return {
     login,
     loginWithGoogle,
+    logout,
     loading,
     error,
   }
