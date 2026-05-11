@@ -1,7 +1,7 @@
 import { DoctorForm } from "../components/DoctorForm"
 import { useDoctor } from "../hooks/useDoctor"
 
-export const CompleteDoctorProfile = () => {
+export const RegisterDoctorPage = () => {
   const { createDoctor, loading, error } = useDoctor()
 
   return (

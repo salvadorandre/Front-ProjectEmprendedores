@@ -31,4 +31,28 @@ export const authService = {
 
   return result
 },
+googleLogin: async (idToken: string) => {
+  const response = await fetch(
+    `${API_URL}/auth/google/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id_token: idToken,
+      }),
+    }
+  )
+
+  const result = await response.json()
+
+  if (!response.ok) {
+    throw new Error(
+      result.error || "Error con Google"
+    )
+  }
+
+  return result
+},
 }

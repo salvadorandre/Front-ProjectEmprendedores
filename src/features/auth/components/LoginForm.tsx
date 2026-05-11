@@ -4,13 +4,14 @@ import { Label } from "@/shared/components/ui/label"
 import { Separator } from "@/shared/components/ui/separator"
 
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { GoogleLogin } from "@react-oauth/google"
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, LoginSchema } from "@/features/auth/forms/login.schema"
 
 export const LoginForm = () => {
-  const { login, loading, error } = useAuth()
+  const { login, loginWithGoogle, loading, error } = useAuth()
 
   const {
     register,
@@ -74,9 +75,30 @@ export const LoginForm = () => {
 
         <Separator />
 
-        <Button variant="outline" className="w-full">
-          Continuar con Google
-        </Button>
+        <p className="text-sm text-center text-muted-foreground">
+          ¿No tienes cuenta?{" "}
+          <a
+            href="/register"
+            className="text-primary underline"
+          >
+            Regístrate aquí
+          </a>
+        </p>
+
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            if (
+              credentialResponse.credential
+            ) {
+              loginWithGoogle(
+                credentialResponse.credential
+              )
+            }
+          }}
+          onError={() => {
+            console.log("Google login failed")
+          }}
+        />
       </div>
     </div>
   )

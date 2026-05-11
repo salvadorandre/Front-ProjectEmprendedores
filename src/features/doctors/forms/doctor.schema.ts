@@ -1,6 +1,14 @@
 import { z } from "zod"
 
 export const doctorSchema = z.object({
+  email: z
+    .string()
+    .email("Correo inválido"),
+
+  password: z
+    .string()
+    .min(6, "Mínimo 6 caracteres"),
+
   specialty: z
     .string()
     .min(1, "La especialidad es requerida"),
