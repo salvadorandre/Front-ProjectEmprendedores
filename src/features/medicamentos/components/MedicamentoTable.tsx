@@ -11,6 +11,7 @@ type Medicamento = {
   id: number
   name: string
   description: string
+  imageUrl?: string
 }
 
 interface MedicamentoTableProps {
@@ -28,6 +29,7 @@ export const MedicamentoTable = ({
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead>Imagen</TableHead>
           <TableHead>Nombre</TableHead>
           <TableHead>Descripción</TableHead>
           <TableHead>Acciones</TableHead>
@@ -37,6 +39,15 @@ export const MedicamentoTable = ({
       <TableBody>
         {data.map((med) => (
           <TableRow key={med.id}>
+            <TableCell>
+              {med.imageUrl && (
+                <img
+                  src={med.imageUrl}
+                  alt={med.name}
+                  className="w-12 h-12 rounded object-cover"
+                />
+              )}
+            </TableCell>
             <TableCell>{med.name}</TableCell>
             <TableCell>{med.description}</TableCell>
             <TableCell className="flex gap-2">

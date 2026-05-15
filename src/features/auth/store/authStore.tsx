@@ -9,12 +9,13 @@ interface AuthState {
 
   login: (data: AuthResponse) => void
   logout: () => void
+  updateAccess: (newAccess: string) => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  access: null,
-  refresh: null,
+  access: localStorage.getItem("access"),
+  refresh: localStorage.getItem("refresh"),
 
   login: (data) => {
     localStorage.setItem("access", data.access)
@@ -24,6 +25,14 @@ export const useAuthStore = create<AuthState>((set) => ({
       user: data.user,
       access: data.access,
       refresh: data.refresh,
+    })
+  },
+
+  updateAccess: (newAccess) => {
+    localStorage.setItem("access", newAccess)
+
+    set({
+      access: newAccess,
     })
   },
 

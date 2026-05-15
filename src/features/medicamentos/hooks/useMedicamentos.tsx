@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react"
 import { medicamentoService } from "../services/medicamento.service"
+
+import type { Medicamento } from "../types"
 import { MedicamentoSchema } from "../forms/medicamento.schema"
 
-type Medicamento = MedicamentoSchema & {
-  id: number
-}
 
 export const useMedicamentos = () => {
   const [data, setData] = useState<Medicamento[]>([])
@@ -17,6 +16,7 @@ export const useMedicamentos = () => {
       setError(null)
 
       const res = await medicamentoService.getAll()
+      console.log(res)
       setData(res)
     } catch (err: any) {
       setError("Error al cargar medicamentos")

@@ -4,12 +4,14 @@ import { Label } from "@/shared/components/ui/label"
 import { Textarea } from "@/shared/components/ui/textarea"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { medicamentoSchema, MedicamentoSchema } from "../forms/medicamento.schema"
+import {
+  medicamentoSchema,
+  MedicamentoSchema,
+} from "../forms/medicamento.schema"
 
-const defaultFormValues: MedicamentoSchema = {
+const defaultFormValues = {
   name: "",
   description: "",
-  imageUrl: "",
 }
 
 interface MedicamentoFormProps {
@@ -43,7 +45,11 @@ export const MedicamentoForm = ({
             <Input placeholder="Nombre del medicamento" {...field} />
           )}
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+        {errors.name && (
+          <p className="text-red-500 text-sm">
+            {errors.name.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -52,25 +58,43 @@ export const MedicamentoForm = ({
           name="description"
           control={control}
           render={({ field }) => (
-            <Textarea placeholder="Descripción del medicamento" {...field} />
+            <Textarea
+              placeholder="Descripción del medicamento"
+              {...field}
+            />
           )}
         />
-        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+        {errors.description && (
+          <p className="text-red-500 text-sm">
+            {errors.description.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
-        <Label>Imagen (URL)</Label>
+        <Label>Imagen</Label>
         <Controller
-          name="imageUrl"
+          name="image"
           control={control}
-          render={({ field }) => (
-            <Input placeholder="https://ejemplo.com/imagen.jpg" {...field} />
+          render={({ field: { onChange } }) => (
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) =>
+                onChange(
+                  e.target.files?.[0] ?? null
+                )
+              }
+            />
           )}
         />
-        {errors.imageUrl && <p className="text-red-500 text-sm">{errors.imageUrl.message}</p>}
       </div>
 
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={loading}
+      >
         {loading ? "Guardando..." : "Guardar"}
       </Button>
     </form>

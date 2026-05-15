@@ -1,83 +1,142 @@
-type Medicamento = {
-  id: number
-  name: string
-  description: string
-  imageUrl?: string
-}
+import { authFetch } from "@/features/auth/lib/authFetch";
+import type { Medicamento } from "../types";
+import type { MedicamentoSchema } from "../forms/medicamento.schema";
 
-let medicamentos: Medicamento[] = [
-  {
-    id: 1,
-    name: "Paracetamol",
-    description: "Alivia el dolor y la fiebre",
-    imageUrl: "",
-  },
-  {
-    id: 2,
-    name: "Ibuprofeno",
-    description: "Antiinflamatorio no esteroideo",
-    imageUrl: "",
-  },
-  {
-    id: 3,
-    name: "Amoxicilina",
-    description: "Antibiótico de amplio espectro",
-    imageUrl: "",
-  },
-]
-
-const delay = (ms: number) =>
-  new Promise((res) => setTimeout(res, ms))
+const BASE_URL = "http://127.0.0.1:8000/api/v1/medicamentos";
 
 export const medicamentoService = {
-  getAll: async (): Promise<Medicamento[]> => {
-    await delay(500)
-    return [...medicamentos]
-  },
+  async getAll(): Promise<Medicamento[]> {
+    const res = await authFetch(`${BASE_URL}/`);
 
-  create: async (
-    data: Omit<Medicamento, "id">
-  ): Promise<Medicamento> => {
-    await delay(500)
+    console.log("GET STATUS:", res.status);
 
-    const newItem: Medicamento = {
-      id: Date.now(),
-      ...data,
+    const json = await res.json();
+
+    console.log("GET RESPONSE:", json);
+
+    if (!res.ok) {
+      throw new Error("Error al obtener medicamentos");
     }
 
-    medicamentos.push(newItem)
-    return newItem
+    return json.medicamentos.map((med: any) => ({
+      id: med.id,
+      name: med.nombre_medicamento,
+      description: med.descripcion,
+      imageUrl: med.imagen ? `http://127.0.0.1:8000${med.imagen}` : undefined,
+    }));
   },
 
-  update: async (
-    id: number,
-    data: Partial<Omit<Medicamento, "id">>
-  ): Promise<Medicamento> => {
-    await delay(500)
+  async create(data: MedicamentoSchema) {
+    const formData = new FormData();
 
-    const index = medicamentos.findIndex((m) => m.id === id)
+    formData.append("nombre_medicamento", data.name);
 
-    if (index === -1) {
-      throw new Error("Medicamento no encontrado")
+    formData.append("descripcion", data.description);
+
+    formData.append("doctor", "1");
+
+    formData.append("is_active", "true");
+
+    if (data.image) {
+      formData.append("imagen", data.image);
     }
 
-    medicamentos[index] = {
-      ...medicamentos[index],
-      ...data,
+    const res = await authFetch(`${BASE_URL}/`, {
+      method: "POST",
+      body: formData,
+    });
+
+    console.log("CREATE STATUS:", res.status);
+
+    const json = await res.json();
+
+    console.log(
+      "CREATE RESPONSE:",
+      JSON.stringify(json, null, 2)
+    )
+
+    if (!res.ok) {
+      throw new Error(json.message || "Error al crear");
     }
 
-    return medicamentos[index]
+    return json;
   },
 
-  delete: async (id: number): Promise<void> => {
-    await delay(500)
+  async update(
+  id: number,
+  data: MedicamentoSchema
+) {
+  const formData =
+    new FormData()
 
-    const exists = medicamentos.some((m) => m.id === id)
+  formData.append(
+    "nombre_medicamento",
+    data.name
+  )
 
-    if (!exists) {
-      throw new Error("Medicamento no encontrado")
+  formData.append(
+    "descripcion",
+    data.description
+  )
+
+  if (data.image) {
+    formData.append(
+      "imagen",
+      data.image
+    )
+  } else {
+    throw new Error(
+      "Debes seleccionar imagen para editar"
+    )
+  }
+
+  const res =
+    await authFetch(
+      `${BASE_URL}/${id}/`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    )
+
+  console.log(
+    "UPDATE STATUS:",
+    res.status
+  )
+
+  const json =
+    await res.json()
+
+  console.log(
+    "UPDATE RESPONSE:",
+    json
+  )
+
+  if (!res.ok) {
+    throw new Error(
+      json.message ||
+      "Error al actualizar"
+    )
+  }
+
+  return json
+},
+
+  async delete(id: number) {
+    const res = await authFetch(`${BASE_URL}/${id}/`, {
+      method: "DELETE",
+    });
+
+    console.log("DELETE STATUS:", res.status);
+
+    const json = await res.json();
+
+    console.log("DELETE RESPONSE:", json);
+
+    if (!res.ok) {
+      throw new Error(json.message || "No se pudo eliminar");
     }
 
-    medicamentos = medicamentos.filter((m) => m.id !== id)
+    return json;
   },
-}
+};
