@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react"
 import { tratamientoService } from "../services/tratamiento.service"
-import type { Tratamiento } from "../types"
+import { tratamientoMedicamentoService } from "../services/tratamientoMedicamento.service"
+import type { TratamientoCompleto, TratamientoMedicamento } from "../types"
+import type { TratamientoSchema } from "../forms/tratamiento.schema"
+
+// Reemplazar con useAuth() cuando esté disponible
+const DOCTOR_ID = 1
 
 export const useTratamientos = () => {
-  const [data, setData] = useState<Tratamiento[]>([])
+  const [data, setData] = useState<TratamientoCompleto[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -12,55 +17,73 @@ export const useTratamientos = () => {
       setLoading(true)
       setError(null)
 
-      const res = await tratamientoService.getAll()
-      setData(res)
-    } catch (err: any) {
+      const [tratamientos, todasAsignaciones] = await Promise.all([
+        tratamientoService.getAll(),
+        tratamientoMedicamentoService.getAll(),
+      ])
+
+      const asignacionesPorTratamiento = todasAsignaciones.reduce
+        <Record<string, TratamientoMedicamento[]>
+      >((acc, tm) => {
+        if (!acc[tm.tratamiento]) acc[tm.tratamiento] = []
+        acc[tm.tratamiento].push(tm)
+        return acc
+      }, {} as Record<string, TratamientoMedicamento[]>)
+
+      const completos: TratamientoCompleto[] = tratamientos.map((t) => ({
+        ...t,
+        medicamentos: asignacionesPorTratamiento[t.uuid] ?? [],
+      }))
+
+      setData(completos)
+    } catch {
       setError("Error al cargar tratamientos")
     } finally {
       setLoading(false)
     }
   }
 
-  type TratamientoPayload = Omit<Tratamiento, "id"> & {
-    medicamentos?: Tratamiento["medicamentos"]
-  }
-
-  const createTratamiento = async (payload: TratamientoPayload) => {
+  const createTratamiento = async (payload: TratamientoSchema) => {
     try {
       setLoading(true)
       setError(null)
-
-      await tratamientoService.create(payload)
+      await tratamientoService.create({
+        doctor: DOCTOR_ID,
+        titulo: payload.titulo,
+        descripcion: payload.descripcion,
+      })
       await getTratamientos()
-    } catch (err: any) {
+    } catch {
       setError("Error al crear tratamiento")
     } finally {
       setLoading(false)
     }
   }
 
-  const updateTratamiento = async (id: number, payload: Partial<TratamientoPayload>) => {
+  const updateTratamiento = async (uuid: string, payload: TratamientoSchema) => {
     try {
       setLoading(true)
       setError(null)
-
-      await tratamientoService.update(id, payload)
+      await tratamientoService.update(uuid, {
+        doctor: DOCTOR_ID,
+        titulo: payload.titulo,
+        descripcion: payload.descripcion,
+      })
       await getTratamientos()
-    } catch (err: any) {
+    } catch {
       setError("Error al actualizar tratamiento")
     } finally {
       setLoading(false)
     }
   }
 
-  const deleteTratamiento = async (id: number) => {
+  const deleteTratamiento = async (uuid: string) => {
     try {
       setLoading(true)
       setError(null)
-
-      await tratamientoService.delete(id)
+      await tratamientoService.delete(uuid)
       await getTratamientos()
-    } catch (err: any) {
+    } catch {
       setError("Error al eliminar tratamiento")
     } finally {
       setLoading(false)

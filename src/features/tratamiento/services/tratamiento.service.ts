@@ -1,83 +1,55 @@
+import { authFetch } from "@/features/auth/lib/authFetch"
 import type { Tratamiento } from "../types"
+import type { TratamientoSchema } from "../forms/tratamiento.schema"
 
-type TratamientoPayload = Omit<Tratamiento, "id"> & {
-  medicamentos?: Tratamiento["medicamentos"]
+const BASE_URL = "http://127.0.0.1:8000/api/v1/tratamientos"
+
+type TratamientoPayload = {
+  doctor: number
+  titulo: string
+  descripcion: string
 }
 
-let tratamientos: Tratamiento[] = [
-  {
-    id: 1,
-    name: "Paracetamol",
-    description: "Alivia el dolor y la fiebre",
-    medicamentos: [],
-  },
-  {
-    id: 2,
-    name: "Ibuprofeno",
-    description: "Antiinflamatorio no esteroideo",
-    medicamentos: [],
-  },
-  {
-    id: 3,
-    name: "Amoxicilina",
-    description: "Antibiótico de amplio espectro",
-    medicamentos: [],
-  },
-]
-
-const delay = (ms: number) =>
-  new Promise((res) => setTimeout(res, ms))
-
 export const tratamientoService = {
-  getAll: async (): Promise<Tratamiento[]> => {
-    await delay(500)
-    return [...tratamientos]
+  async getAll(): Promise<Tratamiento[]> {
+    const res = await authFetch(`${BASE_URL}/`)
+    const json = await res.json()
+
+    if (!res.ok) throw new Error("Error al obtener tratamientos")
+
+    return json.tratamientos
   },
 
-  create: async (
-    data: TratamientoPayload
-  ): Promise<Tratamiento> => {
-    await delay(500)
+  async create(data: TratamientoPayload): Promise<Tratamiento> {
+    const res = await authFetch(`${BASE_URL}/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+    const json = await res.json()
 
-    const newItem: Tratamiento = {
-      id: Date.now(),
-      ...data,
-      medicamentos: data.medicamentos ?? [],
-    }
+    if (!res.ok) throw new Error(json.message || "Error al crear tratamiento")
 
-    tratamientos.push(newItem)
-    return newItem
+    return json.data
   },
 
-  update: async (
-    id: number,
-    data: Partial<TratamientoPayload>
-  ): Promise<Tratamiento> => {
-    await delay(500)
+  async update(uuid: string, data: TratamientoPayload): Promise<void> {
+    const res = await authFetch(`${BASE_URL}/${uuid}/`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+    const json = await res.json()
 
-    const index = tratamientos.findIndex((m) => m.id === id)
-
-    if (index === -1) {
-      throw new Error("Tratamiento no encontrado")
-    }
-
-    tratamientos[index] = {
-      ...tratamientos[index],
-      ...data,
-    }
-
-    return tratamientos[index]
+    if (!res.ok) throw new Error(json.message || "Error al actualizar tratamiento")
   },
 
-  delete: async (id: number): Promise<void> => {
-    await delay(500)
+  async delete(uuid: string): Promise<void> {
+    const res = await authFetch(`${BASE_URL}/${uuid}/`, {
+      method: "DELETE",
+    })
+    const json = await res.json()
 
-    const exists = tratamientos.some((t) => t.id === id)
-
-    if (!exists) {
-      throw new Error("Tratamiento no encontrado")
-    }
-
-    tratamientos = tratamientos.filter((t) => t.id !== id)
+    if (!res.ok) throw new Error(json.message || "Error al eliminar tratamiento")
   },
 }

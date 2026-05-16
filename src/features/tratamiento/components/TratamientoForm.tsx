@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { tratamientoSchema, TratamientoSchema } from "../forms/tratamiento.schema"
 
 const defaultFormValues: TratamientoSchema = {
-  name: "",
-  description: "",
+  titulo: "",
+  descripcion: "",
 }
 
 interface TratamientoFormProps {
@@ -17,16 +17,8 @@ interface TratamientoFormProps {
   loading: boolean
 }
 
-export const TratamientoForm = ({
-  onSubmit,
-  defaultValues,
-  loading,
-}: TratamientoFormProps) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TratamientoSchema>({
+export const TratamientoForm = ({ onSubmit, defaultValues, loading }: TratamientoFormProps) => {
+  const { control, handleSubmit, formState: { errors } } = useForm<TratamientoSchema>({
     resolver: zodResolver(tratamientoSchema),
     defaultValues: defaultValues || defaultFormValues,
   })
@@ -36,27 +28,26 @@ export const TratamientoForm = ({
       <div className="space-y-2">
         <Label>Nombre</Label>
         <Controller
-          name="name"
+          name="titulo"
           control={control}
           render={({ field }) => (
             <Input placeholder="Nombre del tratamiento" {...field} />
           )}
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+        {errors.titulo && <p className="text-red-500 text-sm">{errors.titulo.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label>Descripción</Label>
         <Controller
-          name="description"
+          name="descripcion"
           control={control}
           render={({ field }) => (
             <Textarea placeholder="Descripción del tratamiento" {...field} />
           )}
         />
-        {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+        {errors.descripcion && <p className="text-red-500 text-sm">{errors.descripcion.message}</p>}
       </div>
-
 
       <Button type="submit" className="w-full" disabled={loading}>
         {loading ? "Guardando..." : "Guardar"}

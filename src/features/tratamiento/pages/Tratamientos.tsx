@@ -5,20 +5,15 @@ import { Button } from "@/shared/components/ui/button"
 import { TratamientoSheet } from "../components/TratamientoSheet"
 import { useTratamientos } from "../hooks/useTratamientos"
 import { routes } from "@/app/router/routes"
+import type { TratamientoCompleto } from "../types"
+import type { TratamientoSchema } from "../forms/tratamiento.schema"
 
 export const Tratamientos = () => {
   const navigate = useNavigate()
-
-  const {
-    data,
-    loading,
-    createTratamiento,
-    updateTratamiento,
-    deleteTratamiento,
-  } = useTratamientos()
+  const { data, loading, createTratamiento, updateTratamiento, deleteTratamiento } = useTratamientos()
 
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<any | null>(null)
+  const [selected, setSelected] = useState<TratamientoCompleto | null>(null)
 
   if (loading) return <p>Cargando...</p>
 
@@ -27,24 +22,21 @@ export const Tratamientos = () => {
     setOpen(true)
   }
 
-  const handleEdit = (trat: any) => {
+  const handleEdit = (trat: TratamientoCompleto) => {
     setSelected(trat)
     setOpen(true)
   }
 
-  const handleView = (id: number) => {
-    navigate(routes.editarTratamientos, {
-      state: { id },
-    })
+  const handleView = (uuid: string) => {
+    navigate(routes.editarTratamientos, { state: { uuid } })
   }
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: TratamientoSchema) => {
     if (selected) {
-      await updateTratamiento(selected.id, formData)
+      await updateTratamiento(selected.uuid, formData)
     } else {
       await createTratamiento(formData)
     }
-
     setOpen(false)
   }
 
@@ -52,9 +44,7 @@ export const Tratamientos = () => {
     <div className="p-4 space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">Tratamientos</h1>
-        <Button onClick={handleCreate}>
-          Crear tratamiento
-        </Button>
+        <Button onClick={handleCreate}>Crear tratamiento</Button>
       </div>
 
       <TratamientoTable
