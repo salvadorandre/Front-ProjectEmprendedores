@@ -3,16 +3,19 @@ import { medicamentoService } from "../services/medicamento.service"
 
 import type { Medicamento } from "../types"
 import { MedicamentoSchema } from "../forms/medicamento.schema"
+import { useAuthStore } from "@/features/auth/store/authStore"
 
 
 export const useMedicamentos = () => {
+  const doctorId = useAuthStore((state) => state.doctor?.id)
   const [data, setData] = useState<Medicamento[]>([])
   const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const getMedicamentos = async () => {
+  const getMedicamentos = async (showLoading = false) => {
     try {
-      setLoading(true)
+      if (showLoading) setLoading(true)
       setError(null)
 
       const res = await medicamentoService.getAll()
@@ -21,27 +24,28 @@ export const useMedicamentos = () => {
     } catch (err: any) {
       setError("Error al cargar medicamentos")
     } finally {
-      setLoading(false)
+      if (showLoading) setLoading(false)
     }
   }
 
   const createMedicamento = async (payload: MedicamentoSchema) => {
     try {
-      setLoading(true)
+      setSaving(true)
       setError(null)
+      if (!doctorId) throw new Error("Doctor no autenticado")
 
-      await medicamentoService.create(payload)
+      await medicamentoService.create(payload, doctorId)
       await getMedicamentos()
     } catch (err: any) {
       setError("Error al crear medicamento")
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
   const updateMedicamento = async (id: number, payload: MedicamentoSchema) => {
     try {
-      setLoading(true)
+      setSaving(true)
       setError(null)
 
       await medicamentoService.update(id, payload)
@@ -49,13 +53,13 @@ export const useMedicamentos = () => {
     } catch (err: any) {
       setError("Error al actualizar medicamento")
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
   const deleteMedicamento = async (id: number) => {
     try {
-      setLoading(true)
+      setSaving(true)
       setError(null)
 
       await medicamentoService.delete(id)
@@ -63,17 +67,18 @@ export const useMedicamentos = () => {
     } catch (err: any) {
       setError("Error al eliminar medicamento")
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
   useEffect(() => {
-    getMedicamentos()
+    getMedicamentos(true)
   }, [])
 
   return {
     data,
     loading,
+    saving,
     error,
     getMedicamentos,
     createMedicamento,

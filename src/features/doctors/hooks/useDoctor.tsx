@@ -17,7 +17,14 @@ export const useDoctor = () => {
 
       const res = await doctorService.create(data);
 
-      saveAuth(res);
+      saveAuth({
+        ...res,
+        doctor_id: res.doctor_id ?? {
+          id: res.user.id,
+          especialidad: data.specialty,
+          colegiado: data.license,
+        },
+      });
 
       navigate("/home");
     } catch (err) {

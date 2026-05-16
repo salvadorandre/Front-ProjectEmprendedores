@@ -26,11 +26,11 @@ export const medicamentoService = {
     }));
   },
 
-  async create(data: MedicamentoSchema) {
+  async create(data: MedicamentoSchema, doctorId: number) {
     const body = {
       nombre_medicamento: data.name,
       descripcion: data.description,
-      doctor: 1,
+      doctor: doctorId,
       is_active: true,
       imagen: data.image || "",
     };

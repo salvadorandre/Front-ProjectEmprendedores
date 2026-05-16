@@ -8,6 +8,7 @@ export const Medicamentos = () => {
   const {
     data,
     loading,
+    saving,
     createMedicamento,
     updateMedicamento,
     deleteMedicamento,
@@ -58,7 +59,7 @@ export const Medicamentos = () => {
         onOpenChange={setOpen}
         selected={selected}
         onSubmit={handleSubmit}
-        loading={loading}
+        loading={saving}
       />
     </div>
   )

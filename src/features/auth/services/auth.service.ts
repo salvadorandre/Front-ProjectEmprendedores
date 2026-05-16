@@ -41,6 +41,7 @@ googleLogin: async (idToken: string) => {
       },
       body: JSON.stringify({
         id_token: idToken,
+        is_doctor: true,
       }),
     }
   )
@@ -52,7 +53,7 @@ googleLogin: async (idToken: string) => {
       result.error || "Error con Google"
     )
   }
-
+  console.log(result)
   return result
 },
 }

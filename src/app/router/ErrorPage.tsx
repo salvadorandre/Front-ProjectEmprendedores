@@ -40,9 +40,6 @@ export const ErrorPage = () =>{
                             alt="Mascota de marca indicando un error"
                             className="h-72 w-full max-w-sm rounded-lg object-contain"
                         />
-                        <p className="mt-2 max-w-sm text-sm text-[#517891]/70">
-                            Puedes agregar aqui el personaje oficial para que la pantalla de error mantenga identidad.
-                        </p>
                     </div>
                 </section>
             </div>

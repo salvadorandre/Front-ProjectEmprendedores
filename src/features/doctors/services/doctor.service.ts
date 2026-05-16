@@ -1,3 +1,5 @@
+import type { DoctorProfile } from "@/features/auth/auth.types"
+
 const API_URL = import.meta.env.VITE_API_URL
 
 type DoctorResponse = {
@@ -7,6 +9,7 @@ type DoctorResponse = {
     is_doctor: boolean
     is_paciente: boolean
   }
+  doctor_id?: DoctorProfile | null
   access: string
   refresh: string
 }

@@ -8,10 +8,13 @@ import {
 import { Button } from "./ui/button"
 import { NavLink } from "react-router-dom"
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { useAuthStore } from "@/features/auth/store/authStore"
 import { BarChart3, Home, Pill, Stethoscope } from "lucide-react"
 
 export function AppSidebar() {
   const { logout } = useAuth()
+  const user = useAuthStore((state) => state.user)
+  const specialty = useAuthStore((state) => state.doctor?.especialidad)
 
   const navItems = [
     { to: "/home", label: "Home", icon: Home },
@@ -59,7 +62,12 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-[#90D5FF]/30 p-4">
         <div className="rounded-lg bg-[#90D5FF]/10 px-3 py-2">
           <p className="text-xs font-medium text-[#517891]/70">Sesion activa</p>
-          <p className="text-sm font-semibold text-[#517891]">Usuario</p>
+          <p className="truncate text-sm font-semibold text-[#517891]">
+            {user?.email ?? "Usuario"}
+          </p>
+          {specialty && (
+            <p className="truncate text-xs text-[#517891]/70">{specialty}</p>
+          )}
         </div>
         <Button
           className="w-full bg-[#517891] text-white hover:bg-[#416376]"

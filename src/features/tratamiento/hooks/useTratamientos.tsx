@@ -3,11 +3,10 @@ import { tratamientoService } from "../services/tratamiento.service"
 import { tratamientoMedicamentoService } from "../services/tratamientoMedicamento.service"
 import type { TratamientoCompleto, TratamientoMedicamento } from "../types"
 import type { TratamientoSchema } from "../forms/tratamiento.schema"
-
-// Reemplazar con useAuth() cuando esté disponible
-const DOCTOR_ID = 1
+import { useAuthStore } from "@/features/auth/store/authStore"
 
 export const useTratamientos = () => {
+  const doctorId = useAuthStore((state) => state.doctor?.id)
   const [data, setData] = useState<TratamientoCompleto[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -47,8 +46,10 @@ export const useTratamientos = () => {
     try {
       setLoading(true)
       setError(null)
+      if (!doctorId) throw new Error("Doctor no autenticado")
+
       await tratamientoService.create({
-        doctor: DOCTOR_ID,
+        doctor: doctorId,
         titulo: payload.titulo,
         descripcion: payload.descripcion,
       })
@@ -64,8 +65,10 @@ export const useTratamientos = () => {
     try {
       setLoading(true)
       setError(null)
+      if (!doctorId) throw new Error("Doctor no autenticado")
+
       await tratamientoService.update(uuid, {
-        doctor: DOCTOR_ID,
+        doctor: doctorId,
         titulo: payload.titulo,
         descripcion: payload.descripcion,
       })
