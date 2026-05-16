@@ -7,22 +7,12 @@ export const LoginPage = () => {
                 <section className="hidden h-full min-h-[560px] overflow-hidden rounded-lg border border-[#90D5FF]/50 bg-[#90D5FF]/20 shadow-sm lg:block">
                     <div className="flex h-full flex-col justify-between p-8">
                         <div>
-                            <div className="mb-8 w-fit rounded-lg border border-[#517891]/20 bg-white/80 px-5 py-3 shadow-sm">
-                                <img
-                                    src="/logoh.png"
-                                    alt="Logo"
-                                    className="h-10 w-auto object-contain"
-                                />
-                            </div>
-                            <p className="text-sm font-semibold uppercase tracking-wide text-[#517891]">
-                                Portal veterinario
-                            </p>
                             <h2 className="mt-3 max-w-md text-4xl font-bold text-[#517891]">
-                                Una experiencia clara y cercana con la mascota de la marca.
+                                Una gran salto para tu Clinica se aproxima...
                             </h2>
                         </div>
 
-                        <div className="rounded-lg border border-[#517891]/20 bg-white/70 p-6 text-center shadow-sm">
+                        <div className="rounded-lg border border-[#517891]/20 bg-white/70 p-20 text-center shadow-sm">
                             <img
                                 src="/greeting.jfif"
                                 alt="Mascota de marca saludando"

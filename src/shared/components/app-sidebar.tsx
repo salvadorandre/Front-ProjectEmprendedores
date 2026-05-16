@@ -23,20 +23,12 @@ export function AppSidebar() {
   return (
     <Sidebar className="border-r border-[#90D5FF]/40 bg-white">
       <SidebarHeader className="border-b border-[#90D5FF]/30 p-4">
-        <div className="flex items-center gap-3 rounded-lg border border-[#90D5FF]/40 bg-[#90D5FF]/10 p-3">
+        <div className="flex w-full items-center justify-center gap-3 rounded-lg  p-3">
           <img
-            src="/logoIcono.png"
+            src="/logoh.png"
             alt="Logo"
-            className="size-12 shrink-0 rounded-lg bg-white object-contain p-2 shadow-sm"
+            className="w-full shrink-0 rounded-lg bg-white object-contain p-2 shadow-sm"
           />
-          <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#517891]">
-              Panel medico
-            </p>
-            <p className="mt-1 truncate text-sm text-[#517891]/70">
-              Gestion veterinaria
-            </p>
-          </div>
         </div>
       </SidebarHeader>
 

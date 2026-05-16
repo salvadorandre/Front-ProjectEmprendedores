@@ -26,18 +26,15 @@ export const DoctorForm = ({
 
   return (
     <div className="w-full rounded-lg border border-[#90D5FF]/50 bg-white p-6 shadow-[0_20px_60px_rgba(81,120,145,0.16)] sm:p-8">
-      <div className="mx-auto mb-6 w-fit rounded-lg border border-[#90D5FF]/40 bg-[#90D5FF]/10 px-5 py-3">
+      <div className="mx-auto mb-6 flex items-center justify-center w-full rounded-lg border bg-white px-5 py-3">
         <img
           src="/logoh.png"
           alt="Logo"
-          className="h-9 w-auto object-contain"
+          className="h-20 w-auto object-contain"
         />
       </div>
 
       <div className="mb-6 space-y-2 text-center">
-        <p className="text-sm font-semibold uppercase tracking-wide text-[#517891]/70">
-          Nueva cuenta
-        </p>
         <h1 className="text-3xl font-bold text-[#517891]">
           Registrarse como doctor
         </h1>
