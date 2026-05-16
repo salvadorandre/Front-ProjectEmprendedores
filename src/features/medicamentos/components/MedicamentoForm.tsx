@@ -12,6 +12,7 @@ import {
 const defaultFormValues = {
   name: "",
   description: "",
+  image: "",
 }
 
 interface MedicamentoFormProps {
@@ -76,18 +77,19 @@ export const MedicamentoForm = ({
         <Controller
           name="image"
           control={control}
-          render={({ field: { onChange } }) => (
+          render={({ field }) => (
             <Input
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                onChange(
-                  e.target.files?.[0] ?? null
-                )
-              }
+              type="url"
+              placeholder="https://ejemplo.com/imagen.jpg"
+              {...field}
             />
           )}
         />
+        {errors.image && (
+          <p className="text-red-500 text-sm">
+            {errors.image.message}
+          </p>
+        )}
       </div>
 
       <Button

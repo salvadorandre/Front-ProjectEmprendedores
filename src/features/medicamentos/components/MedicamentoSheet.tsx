@@ -23,6 +23,14 @@ export const MedicamentoSheet = ({
   onSubmit,
   loading,
 }: MedicamentoSheetProps) => {
+  const defaultValues = selected
+    ? {
+        name: selected.name,
+        description: selected.description,
+        image: selected.imageUrl ?? "",
+      }
+    : null
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-100 overflow-y-auto p-5">
@@ -40,7 +48,7 @@ export const MedicamentoSheet = ({
           <MedicamentoForm
             key={selected?.id || "create"}
             onSubmit={onSubmit}
-            defaultValues={selected}
+            defaultValues={defaultValues}
             loading={loading}
           />
         </div>

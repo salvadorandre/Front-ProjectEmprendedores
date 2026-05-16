@@ -4,76 +4,76 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-
 } from "@/shared/components/ui/sidebar"
 import { Button } from "./ui/button"
 import { NavLink } from "react-router-dom"
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { BarChart3, Home, Pill, Stethoscope } from "lucide-react"
 
 export function AppSidebar() {
-
   const { logout } = useAuth()
 
+  const navItems = [
+    { to: "/home", label: "Home", icon: Home },
+    { to: "/medicamentos", label: "Medicamentos", icon: Pill },
+    { to: "/tratamientos", label: "Tratamientos", icon: Stethoscope },
+    { to: "/dashboard", label: "Dashboard", icon: BarChart3 },
+  ]
+
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <h2 className="text-lg font-bold px-2">Clinix</h2>
+    <Sidebar className="border-r border-[#90D5FF]/40 bg-white">
+      <SidebarHeader className="border-b border-[#90D5FF]/30 p-4">
+        <div className="flex items-center gap-3 rounded-lg border border-[#90D5FF]/40 bg-[#90D5FF]/10 p-3">
+          <img
+            src="/logoIcono.png"
+            alt="Logo"
+            className="size-12 shrink-0 rounded-lg bg-white object-contain p-2 shadow-sm"
+          />
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#517891]">
+              Panel medico
+            </p>
+            <p className="mt-1 truncate text-sm text-[#517891]/70">
+              Gestion veterinaria
+            </p>
+          </div>
+        </div>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
           <nav className="flex flex-col gap-2 p-2">
-            <NavLink
-              to="/home"
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-muted px-2 py-1 rounded font-semibold"
-                  : "px-2 py-1"
-              }
-            >
-              Home
-            </NavLink>
-
-            <NavLink
-              to="/medicamentos"
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-muted px-2 py-1 rounded font-semibold"
-                  : "px-2 py-1"
-              }
-            >
-              Medicamentos
-            </NavLink>
-
-            <NavLink
-              to="/tratamientos"
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-muted px-2 py-1 rounded font-semibold"
-                  : "px-2 py-1"
-              }
-            >
-              Tratamientos
-            </NavLink>
-
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                isActive
-                  ? "bg-muted px-2 py-1 rounded font-semibold"
-                  : "px-2 py-1"
-              }
-            >
-              Dashboard
-            </NavLink>
+            {navItems.map(({ to, label, icon: Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  [
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-[#90D5FF] text-[#517891] shadow-sm"
+                      : "text-[#517891] hover:bg-[#90D5FF]/20 hover:text-[#517891]",
+                  ].join(" ")
+                }
+              >
+                <Icon className="size-4" />
+                <span>{label}</span>
+              </NavLink>
+            ))}
           </nav>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
-        <p className="text-sm px-2">Usuario</p>
-        <Button onClick={logout}>
-          Cerrar sesión
+      <SidebarFooter className="border-t border-[#90D5FF]/30 p-4">
+        <div className="rounded-lg bg-[#90D5FF]/10 px-3 py-2">
+          <p className="text-xs font-medium text-[#517891]/70">Sesion activa</p>
+          <p className="text-sm font-semibold text-[#517891]">Usuario</p>
+        </div>
+        <Button
+          className="w-full bg-[#517891] text-white hover:bg-[#416376]"
+          onClick={logout}
+        >
+          Cerrar sesion
         </Button>
       </SidebarFooter>
     </Sidebar>

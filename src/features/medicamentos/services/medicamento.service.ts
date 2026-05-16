@@ -22,28 +22,25 @@ export const medicamentoService = {
       id: med.id,
       name: med.nombre_medicamento,
       description: med.descripcion,
-      imageUrl: med.imagen ? `http://127.0.0.1:8000${med.imagen}` : undefined,
+      imageUrl: med.imagen || undefined,
     }));
   },
 
   async create(data: MedicamentoSchema) {
-    const formData = new FormData();
-
-    formData.append("nombre_medicamento", data.name);
-
-    formData.append("descripcion", data.description);
-
-    formData.append("doctor", "1");
-
-    formData.append("is_active", "true");
-
-    if (data.image) {
-      formData.append("imagen", data.image);
-    }
+    const body = {
+      nombre_medicamento: data.name,
+      descripcion: data.description,
+      doctor: 1,
+      is_active: true,
+      imagen: data.image || "",
+    };
 
     const res = await authFetch(`${BASE_URL}/`, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
     });
 
     console.log("CREATE STATUS:", res.status);
@@ -66,28 +63,10 @@ export const medicamentoService = {
   id: number,
   data: MedicamentoSchema
 ) {
-  const formData =
-    new FormData()
-
-  formData.append(
-    "nombre_medicamento",
-    data.name
-  )
-
-  formData.append(
-    "descripcion",
-    data.description
-  )
-
-  if (data.image) {
-    formData.append(
-      "imagen",
-      data.image
-    )
-  } else {
-    throw new Error(
-      "Debes seleccionar imagen para editar"
-    )
+  const body = {
+    nombre_medicamento: data.name,
+    descripcion: data.description,
+    imagen: data.image || "",
   }
 
   const res =
@@ -95,7 +74,10 @@ export const medicamentoService = {
       `${BASE_URL}/${id}/`,
       {
         method: "PUT",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
       }
     )
 

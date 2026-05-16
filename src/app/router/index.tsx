@@ -7,6 +7,7 @@ import { ErrorPage } from "./ErrorPage"
 
 import { LoginPage } from "@/features/auth/pages/LoginPage"
 import { RegisterDoctorPage } from "@/features/doctors/pages/RegisterDoctorPage"
+import { DashboardPage } from "@/features/dashboard/pages/DashboardPage"
 
 import { Medicamentos } from "@/features/medicamentos/pages/Medicamentos"
 import { Tratamientos } from "@/features/tratamiento/pages/Tratamientos"
@@ -14,7 +15,7 @@ import { EditTratamiento } from "@/features/tratamiento/pages/EditTratamiento"
 import { Navigate } from "react-router-dom"
 
 const Home = () => <h1>Home</h1>
-const Dashboard = () => <h1>Dashboard</h1>
+
 
 export const router = createBrowserRouter([
   // PUBLICAS
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Dashboard/>
+        element: <DashboardPage/>
       },
       {
         path: routes.home,
@@ -58,7 +59,7 @@ export const router = createBrowserRouter([
       },
       {
         path: routes.dashboard,
-        element: <Dashboard />,
+        element: <DashboardPage />,
       },
     ],
   },
