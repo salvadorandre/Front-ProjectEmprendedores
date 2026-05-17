@@ -7,4 +7,5 @@ export const routes = {
   tratamientos: "/tratamientos",
   editarTratamientos: "/editTratamientos",
   medicamentos: "/medicamentos",
+  historial: "/historial",
 }

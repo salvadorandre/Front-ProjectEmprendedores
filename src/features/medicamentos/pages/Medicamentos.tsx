@@ -40,7 +40,7 @@ export const Medicamentos = () => {
   }
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="animate-fade p-4 space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">Medicamentos</h1>
         <Button onClick={handleCreate}>

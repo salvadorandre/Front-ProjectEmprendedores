@@ -8,13 +8,12 @@ import { ErrorPage } from "./ErrorPage"
 import { LoginPage } from "@/features/auth/pages/LoginPage"
 import { RegisterDoctorPage } from "@/features/doctors/pages/RegisterDoctorPage"
 import { DashboardPage } from "@/features/dashboard/pages/DashboardPage"
+import { HomePage } from "@/features/dashboard/pages/HomePage"
 
 import { Medicamentos } from "@/features/medicamentos/pages/Medicamentos"
 import { Tratamientos } from "@/features/tratamiento/pages/Tratamientos"
 import { EditTratamiento } from "@/features/tratamiento/pages/EditTratamiento"
-import { Navigate } from "react-router-dom"
-
-const Home = () => <h1>Home</h1>
+import { HistorialPage } from "@/features/historial/pages/HistorialPage"
 
 
 export const router = createBrowserRouter([
@@ -39,11 +38,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <DashboardPage/>
+        element: <HomePage />
       },
       {
         path: routes.home,
-        element: <Home />,
+        element: <HomePage />,
       },
       {
         path: routes.tratamientos,
@@ -56,6 +55,10 @@ export const router = createBrowserRouter([
       {
         path: routes.medicamentos,
         element: <Medicamentos />,
+      },
+      {
+        path: routes.historial,
+        element: <HistorialPage />,
       },
       {
         path: routes.dashboard,

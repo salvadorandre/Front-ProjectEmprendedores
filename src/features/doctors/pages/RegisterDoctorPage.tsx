@@ -5,7 +5,7 @@ export const RegisterDoctorPage = () => {
   const { createDoctor, loading, error } = useDoctor()
 
   return (
-    <div className="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8">
+    <div className="animate-fade min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-6xl items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <DoctorForm
           onSubmit={createDoctor}
@@ -13,7 +13,7 @@ export const RegisterDoctorPage = () => {
           error={error}
         />
 
-        <section className="hidden h-full min-h-[620px] overflow-hidden rounded-lg border border-[#90D5FF]/50 bg-[#90D5FF]/20 shadow-sm lg:block">
+        <section className="hidden h-full min-h-155 overflow-hidden rounded-lg border border-[#90D5FF]/50 bg-[#90D5FF]/20 shadow-sm lg:block">
           <div className="flex h-full flex-col justify-between p-8">
             <div>
 

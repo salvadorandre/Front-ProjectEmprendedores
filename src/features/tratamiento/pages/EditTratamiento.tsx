@@ -12,6 +12,8 @@ import { Textarea } from "@/shared/components/ui/textarea"
 import type { TratamientoSchema } from "../forms/tratamiento.schema"
 import type { Medicamento } from "@/features/medicamentos/types"
 import type { TratamientoMedicamentoUI } from "../types"
+import { useTimeFormat } from "@/shared/hooks/useTimeFormat"
+
 
 export const EditTratamiento = () => {
   const navigate = useNavigate()
@@ -19,6 +21,7 @@ export const EditTratamiento = () => {
   const state = location.state as { uuid?: string } | null
   const tratamientoUuid = state?.uuid
 
+  const { formatToAmPm } = useTimeFormat()
   const { data, loading, error, updateTratamiento } = useTratamientos()
   const { data: allMedicamentos, loading: medsLoading } = useMedicamentos()
 
@@ -85,32 +88,31 @@ export const EditTratamiento = () => {
   }
 
   const handleSubmit = async (formData: TratamientoSchema) => {
-    if (!selectedTratamiento) return
+  if (!selectedTratamiento) return
 
-    // 1. Actualizar datos base
-    await updateTratamiento(selectedTratamiento.uuid, formData)
+  await updateTratamiento(selectedTratamiento.uuid, formData)
 
-    // 2. Borrar asignaciones actuales y recrear con el estado actual de la UI
-    await Promise.all(
-      selectedTratamiento.medicamentos.map((tm) =>
-        tratamientoMedicamentoService.delete(tm.id)
-      )
+  await Promise.all(
+    selectedTratamiento.medicamentos.map((tm) =>
+      tratamientoMedicamentoService.delete(tm.id)
     )
-    await Promise.all(
-      associatedMedicamentos.map((med) =>
-        tratamientoMedicamentoService.create({
-          tratamiento: selectedTratamiento.uuid,
-          medicamento: med.id,
-          dosis: med.dosis,
-          frecuencia: med.frecuencia,
-          horario: med.horario,
-          instrucciones: med.instrucciones,
-        })
-      )
-    )
+  )
 
-    navigate(routes.tratamientos)
-  }
+  await Promise.all(
+    associatedMedicamentos.map((med) =>
+      tratamientoMedicamentoService.create({
+        tratamiento: selectedTratamiento.uuid,
+        medicamento: med.id,
+        dosis: med.dosis,
+        frecuencia: med.frecuencia,
+        horario: formatToAmPm(med.horario), // ← conversión aquí
+        instrucciones: med.instrucciones,
+      })
+    )
+  )
+
+  navigate(routes.tratamientos)
+}
 
   if (tratamientoUuid == null) return null
   if (loading || medsLoading) return <p>Cargando tratamiento...</p>
@@ -230,11 +232,17 @@ export const EditTratamiento = () => {
                     <div className="space-y-1">
                       <Label className="text-xs">Horario</Label>
                       <Input
+                        type = "time"
+                        step="60"
                         value={med.horario}
                         onChange={(e) => handleUpdateMedicamento(med.id, "horario", e.target.value)}
                         placeholder="ej: Cada 8 horas"
                         className="text-sm"
                       />
+                      {/* Muestra la hora en AM/PM como referencia visual */}
+                    {med.horario && (
+                      <p className="text-xs text-slate-500">{formatToAmPm(med.horario)}</p>
+                    )}
                     </div>
                   </div>
 

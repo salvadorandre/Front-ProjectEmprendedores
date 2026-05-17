@@ -5,7 +5,7 @@ import { AppSidebar } from "@/shared/components/app-sidebar"
 export const MainLayout = () => {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-[#90D5FF]/10">
+      <div className="animate-fade flex min-h-screen w-full bg-[#90D5FF]/10">
         <AppSidebar />
 
         <main className="flex-1">

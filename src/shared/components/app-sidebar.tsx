@@ -9,7 +9,7 @@ import { Button } from "./ui/button"
 import { NavLink } from "react-router-dom"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useAuthStore } from "@/features/auth/store/authStore"
-import { BarChart3, Home, Pill, Stethoscope } from "lucide-react"
+import { BarChart3, History, Home, Pill, Stethoscope } from "lucide-react"
 
 export function AppSidebar() {
   const { logout } = useAuth()
@@ -20,6 +20,7 @@ export function AppSidebar() {
     { to: "/home", label: "Home", icon: Home },
     { to: "/medicamentos", label: "Medicamentos", icon: Pill },
     { to: "/tratamientos", label: "Tratamientos", icon: Stethoscope },
+    { to: "/historial", label: "Historial", icon: History },
     { to: "/dashboard", label: "Dashboard", icon: BarChart3 },
   ]
 

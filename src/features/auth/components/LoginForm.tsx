@@ -26,7 +26,7 @@ export const LoginForm = () => {
   }
 
   return (
-    <div className="w-full rounded-lg border border-[#90D5FF]/50 bg-white p-6 shadow-[0_20px_60px_rgba(81,120,145,0.16)] sm:p-8">
+    <div className="animate-fade w-full rounded-lg border border-[#90D5FF]/50 bg-white p-6 shadow-[0_20px_60px_rgba(81,120,145,0.16)] sm:p-8">
       <div className="flex items-center justify-center mx-auto mb-6 w-fit rounded-lg border px-5 py-3">
         <img
           src="/logoh.png"
@@ -52,7 +52,7 @@ export const LoginForm = () => {
         />
       </div>
 
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="animate-fade space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <Label className="text-[#517891]">Email</Label>
           <Input
